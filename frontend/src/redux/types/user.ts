@@ -1,0 +1,4 @@
+// user registration/signup
+export const USER_REGISTER_REQUEST = "USER/REGISTER_REQUEST"
+export const USER_REGISTER_SUCCESS = "USER/REGISTER_SUCCESS"
+export const USER_REGISTER_FAIL = "USER/REGISTER_FAIL"

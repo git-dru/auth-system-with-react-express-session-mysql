@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { register } from "../../redux/actions/userAction";
+import { useAppDispatch } from "../../redux/hooks";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -8,7 +10,14 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const submitHandler = () => {};
+  const dispatch = useAppDispatch();
+  const submitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+    } else {
+      dispatch(register(username, email, password));
+    }
+  };
 
   return (
     <div>
