@@ -17,11 +17,14 @@ export const userSlice = createSlice({
   reducers: {
     REGISTER_SUCCESS: (state, action: PayloadAction<string>) => {
       state.email = action.payload
+    },
+    LOGIN_SUCCESS: (state, action: PayloadAction<string>) => {
+      state.email = action.payload
     }
   }
 })
 
-export const { REGISTER_SUCCESS } = userSlice.actions
+export const { REGISTER_SUCCESS,LOGIN_SUCCESS } = userSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 
