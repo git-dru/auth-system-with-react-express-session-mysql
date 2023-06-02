@@ -2,15 +2,16 @@ import React from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 
 import { LinkContainer } from "react-router-bootstrap";
+import { useAppSelector } from "../redux/hooks";
 
 const Header = () => {
-  const userInfo = undefined;
+  const { email } = useAppSelector((state) => state.user);
   const logoutHandler = () => {};
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-        <Container>
+      <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
+        <Container className="d-flex">
           <LinkContainer to="/">
             <Navbar.Brand>
               <i className="mb-2 fas fa-home"> Home</i>
@@ -18,11 +19,11 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            {userInfo ? (
+            {email ? (
               <div>
                 <NavDropdown
                   className="navbar-nav text-capitalize"
-                  title={"username"}
+                  title={email}
                   id="username"
                 >
                   <NavDropdown.Item onClick={logoutHandler}>

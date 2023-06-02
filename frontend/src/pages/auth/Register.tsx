@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { register } from "../../redux/actions/userAction";
 import { useAppDispatch } from "../../redux/hooks";
@@ -11,11 +11,14 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const dispatch = useAppDispatch();
-  const submitHandler = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
     } else {
-      dispatch(register(username, email, password));
+      await dispatch(register(username, email, password));
+      navigate("/todo");
     }
   };
 
