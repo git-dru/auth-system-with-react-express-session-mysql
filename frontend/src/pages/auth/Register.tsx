@@ -18,7 +18,7 @@ const RegisterPage = () => {
     if (password !== confirmPassword) {
     } else {
       await dispatch(register(username, email, password));
-      navigate("/todo");
+      navigate("/home");
     }
   };
 

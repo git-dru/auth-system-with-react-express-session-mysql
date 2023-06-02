@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 
 import { LinkContainer } from "react-router-bootstrap";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { logout } from "../redux/actions/userAction";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../redux/store";
 
 const Header = () => {
-  const { email } = useAppSelector((state) => state.user);
-  const logoutHandler = () => {};
+  const { email } = useAppSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
+  const logoutHandler = async () => {
+    await dispatch(logout());
+  };
+
+  useEffect(() => {
+    if (!email) navigate("/login");
+  }, []);
   return (
     <header>
       <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>

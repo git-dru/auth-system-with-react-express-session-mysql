@@ -1,7 +1,7 @@
 import React from "react";
 
-const Todo = () => {
+const Home = () => {
   return <div>Successfully Loggin.</div>;
 };
 
-export default Todo;
+export default Home;

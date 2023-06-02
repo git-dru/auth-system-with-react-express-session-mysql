@@ -1,42 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import axios from "axios";
-import { BASE_URL } from "../../config";
 import { useAppDispatch } from "../../redux/hooks";
-import { login } from "../../redux/actions/userAction";
+import { login, getSession } from "../../redux/actions/userAction";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(login(email, password));
-    navigate("/todo");
+    navigate("/home");
   };
-
-  useEffect(() => {
-    fetch(`${BASE_URL}/api`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) return response.json();
-        throw new Error("failed to authenticate user");
-      })
-      .then((responseJson) => {
-        console.log(responseJson);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   return (
     <div>
