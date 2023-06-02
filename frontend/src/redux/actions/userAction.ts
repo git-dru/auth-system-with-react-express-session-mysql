@@ -8,7 +8,15 @@ import {
 
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
-  USER_LOGIN_FAIL
+  USER_LOGIN_FAIL, 
+
+  USER_LOGOUT_REQUEST,
+  USER_LOGOUT_SUCCESS,
+  USER_LOGOUT_FAIL,
+
+  USER_SESSION_REQUEST,
+  USER_SESSION_SUCCESS,
+  USER_SESSION_FAIL
 } from '../types/user';
 
 import { BASE_URL } from '../../config';
@@ -42,8 +50,6 @@ export const register = (username:string, email:string, password:string) => asyn
 }
 
 export const login = (email:string, password:string) => async (dispatch:AppDispatch) => {
-    console.log(email)
-
     try {
         dispatch({ type: USER_LOGIN_REQUEST })
   
@@ -52,8 +58,6 @@ export const login = (email:string, password:string) => async (dispatch:AppDispa
             {withCredentials: true}
         )
 
-        console.log(data)
-        
         dispatch({
             type: USER_LOGIN_SUCCESS,
             payload: data.result.email
@@ -62,6 +66,42 @@ export const login = (email:string, password:string) => async (dispatch:AppDispa
     catch (error) {
         dispatch({
             type: USER_LOGIN_FAIL,
+        })
+    }
+  }
+
+  export const getSession = () => async (dispatch:AppDispatch) => {
+    try {
+        dispatch({ type: USER_SESSION_REQUEST })
+  
+        const { data } =  await axios.get(`${BASE_URL}/api`, { withCredentials: true })
+        
+        dispatch({
+            type: USER_SESSION_SUCCESS,
+            payload: data.result.email
+        })
+        
+    }
+    catch (error) {
+        dispatch({
+            type: USER_SESSION_FAIL,
+        })
+    }
+  }
+
+  export const logout = () => async (dispatch: AppDispatch) => {
+    try {
+        dispatch({ type: USER_SESSION_REQUEST })
+  
+        await axios.get(`${BASE_URL}/api/user/logout`, { withCredentials: true })
+        
+        dispatch({
+            type: USER_SESSION_SUCCESS,
+        })
+    }
+    catch (error) {
+        dispatch({
+            type: USER_SESSION_FAIL,
         })
     }
   }
