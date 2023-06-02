@@ -12,14 +12,14 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
-// const apiRoutes = require('./routes');
+const apiRoutes = require('./routes');
 
-// app.use('/api', cors(), apiRoutes);
+app.use('/api', cors(), apiRoutes);
 
 const server = http.createServer(app);
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8000;
 server.listen(PORT);
 
 server.on('listening', () => {
