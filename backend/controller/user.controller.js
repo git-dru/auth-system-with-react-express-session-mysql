@@ -107,7 +107,7 @@ async function login(req, res) {
     req.session.user = { email }
     return res.status(httpStatus.OK).json({
       success: true,
-      result: { email: user.email },
+      result: { email },
     })
   } catch (error) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -118,7 +118,6 @@ async function login(req, res) {
 }
 
 async function logout(req, res) {
-  console.log('*********')
   req.session.destroy(function (err) {
     if (err) throw err;
     res.send("You have been logged out of your session. Please login to contiune");

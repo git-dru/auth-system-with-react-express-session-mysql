@@ -49,7 +49,7 @@ app.get("/api", authCheck, (req, res) => {
   res.status(200).json({
     authenticated: true,
     message: "user successfully authenticated",
-    user: req.session.user.email,
+    result: { email: req.session.user.email },
     cookies: req.cookies
   });
 });
