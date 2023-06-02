@@ -44,7 +44,7 @@ async function register(req, res) {
       email,
       password: hashedPassword,
     })
-
+    req.session.user = { email }
     return res.status(httpStatus.OK).json({
       success: true,
       result: { email },
@@ -58,6 +58,75 @@ async function register(req, res) {
   }
 }
 
+async function login(req, res) {
+  try {
+
+    const email = req.body.email
+    const password = req.body.password
+
+    const hashedPassword = await bcrypt.hash(
+      password,
+      12,
+    );
+
+    const user = await User.findOne({
+      where: { email },
+      raw: true,
+    })
+
+    if (!user) {
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        success: 'false',
+        message: 'User not found',
+      })
+    }
+
+    if (!user.password) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        success: 'false',
+        message: 'Wrong Password',
+      })
+    }
+
+    const passwordsMatch = await bcrypt.compare(password, user.password)
+
+    if (!passwordsMatch) {
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        success: 'false',
+        message: 'Password not matched',
+        data: [password, user.password, hashedPassword]
+      })
+    }
+
+    const data = {
+      user: {
+        id: user.id,
+        email: user.email,
+      },
+    }
+    req.session.user = { email }
+    return res.status(httpStatus.OK).json({
+      success: true,
+      result: { email: user.email },
+    })
+  } catch (error) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      success: 'false',
+      message: 'Internal Server Error:' + error.message,
+    })
+  }
+}
+
+async function logout(req, res) {
+  console.log('*********')
+  req.session.destroy(function (err) {
+    if (err) throw err;
+    res.send("You have been logged out of your session. Please login to contiune");
+
+  });
+}
 module.exports = {
-  register
+  register,
+  login,
+  logout
 }

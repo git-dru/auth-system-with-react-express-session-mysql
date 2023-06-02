@@ -1,20 +1,58 @@
-const http = require('http');
-const express = require('express');
-const compression = require('compression');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+//importing modules
+const http = require("http")
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const bodyParser = require("body-parser")
+const compression = require("compression")
+var cookieParser = require("cookie-parser");
+var session = require("express-session");
+
+// using middlewares
+app.use(cookieParser());
+
+app.use(express.json());
+const apiRoutes = require('./routes');
+
+app.use(
+  session({
+    secret: "keyboard",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { expires: new Date(253402300000000) }
+  })
+);
+
+app.use('/api', cors({ credentials: true, origin: "http://localhost:3000" }), apiRoutes);
+
+
 const helmet = require('helmet');
 const sequelize = require('./database')
-const app = express();
 
 app.use(helmet());
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(compression());
-const apiRoutes = require('./routes');
 
-app.use('/api', cors(), apiRoutes);
+const authCheck = (req, res, next) => {
+  if (!req.session.user) {
+    res.status(401).json({
+      authenticated: false,
+      message: "user has not been authenticated"
+    });
+  } else {
+    next();
+  }
+};
+
+app.get("/api", authCheck, (req, res) => {
+  res.status(200).json({
+    authenticated: true,
+    message: "user successfully authenticated",
+    user: req.session.user.email,
+    cookies: req.cookies
+  });
+});
 
 const server = http.createServer(app);
 
